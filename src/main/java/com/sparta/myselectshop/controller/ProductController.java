@@ -57,4 +57,11 @@ public class ProductController {
                 isAsc
         );
     }
+
+    @PostMapping("/products/{productId}/folder")
+    public void addFolder(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                          @PathVariable Long productId,
+                          @RequestParam("folderId") Long folderId) {
+        productService.addFolder(productId, folderId, userDetails.getUser());
+    }
 }
