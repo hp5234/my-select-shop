@@ -8,6 +8,7 @@ import com.sparta.myselectshop.security.UserDetailsImpl;
 import com.sparta.myselectshop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,21 +42,19 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public List<ProductResponseDto> getProducts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return productService.getProducts(userDetails.getUser());
+    public Page<ProductResponseDto> getProducts(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return productService.getProducts(
+                userDetails.getUser(),
+                page - 1,
+                size,
+                sortBy,
+                isAsc
+        );
     }
-
-    // Admin 계정은 모든 계정의 상품을 조회할 수 있도록 추가 구성
-    @GetMapping("/admin/products")
-    public List<ProductResponseDto> getAllProducts(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        UserRoleEnum role = userDetails.getUser().getRole();
-        log.info("role = {}", role);
-
-        if (!UserRoleEnum.ADMIN.equals(role)) {
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
-
-        return productService.getAllProducts();
-    }
-
 }
