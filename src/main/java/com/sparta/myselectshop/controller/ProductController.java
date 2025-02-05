@@ -24,7 +24,7 @@ public class ProductController {
     }
 
     @PutMapping("/products/{id}")
-    public ProductResponseDto updateProduct(@PathVariable int id, @RequestBody ProductMypriceRequestDto requestDto) {
+    public ProductResponseDto updateProduct(@PathVariable long id, @RequestBody ProductMypriceRequestDto requestDto) {
 
         int myprice = requestDto.getMyprice();
         if (myprice < MIN_MY_PRICE) {
