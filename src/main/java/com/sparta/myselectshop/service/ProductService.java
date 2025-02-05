@@ -46,9 +46,7 @@ public class ProductService {
     public Page<ProductResponseDto> getProducts(User user, int page, int size, String sortBy, boolean isAsc) {
 
         // 페이징 객체 생성
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = getPageable(page, size, sortBy, isAsc);
 
         UserRoleEnum userReleEnum = user.getRole();
         Page<Product> productList;
@@ -97,5 +95,21 @@ public class ProductService {
                 });
 
         productFolderRepository.save(new ProductFolder(product, folder));
+    }
+
+    public Page<ProductResponseDto> getProductsInFolder(Long folderId, int page, int size, String sortBy, boolean isAsc, User user) {
+        Pageable pageable = getPageable(page, size, sortBy, isAsc);
+
+        Page<ProductResponseDto> responseDtoList = productRepository.findAllByUserAndProductFolderList_FolderId(user, folderId, pageable)
+                .map(ProductResponseDto::new); // Page<Product> -> Page<ProductResponseDto>
+
+        return responseDtoList;
+    }
+
+    private Pageable getPageable(int page, int size, String sortBy, boolean isAsc) {
+        // 페이징 객체 생성
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        return PageRequest.of(page, size, sort);
     }
 }
