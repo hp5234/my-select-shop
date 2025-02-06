@@ -17,7 +17,7 @@
 //import java.util.ArrayList;
 //import java.util.List;
 //
-//import static com.sparta.myselectshop.controller.ProductController.MIN_MY_PRICE;
+//import static com.sparta.myselectshop.service.ProductService.MIN_MY_PRICE;
 //
 //@Component
 //public class TestDataRunner implements ApplicationRunner {
