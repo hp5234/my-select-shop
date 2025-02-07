@@ -33,16 +33,4 @@ public class FolderController {
     public List<FolderResponseDto> getFolders(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return folderService.getFolders(userDetails.getUser());
     }
-
-    // 해당 컨트롤러에서 ExceptionHandler 에 명시된 예외가 발생하면
-    // handleException 메서드가 실행된다.
-    @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<RestApiException> handleException(IllegalArgumentException ex) {
-        log.info("handleException 실행 : {}", ex.getMessage());
-        RestApiException restApiException = new RestApiException(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(
-                restApiException, // HTTP body
-                HttpStatus.BAD_REQUEST // HTTP status code
-        );
-    }
 }
