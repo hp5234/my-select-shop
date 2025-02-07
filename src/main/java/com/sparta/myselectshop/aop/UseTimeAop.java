@@ -33,14 +33,21 @@ public class UseTimeAop {
     // 무엇을 수행할것인지 지정
     @Around("product() || folder() || naver()")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        // 핵심 기능 수행 전
+
         // 측정 시작 시간
         long startTime = System.currentTimeMillis();
 
         try {
-            // 핵심기능 수행
+            // 핵심기능 수행 : Around 이므로 joinPoint.proceed() 를 사용
+            // After 나 Before 는 joinPoint.proceed() 를 사용하지 않을 수 있다.
             Object output = joinPoint.proceed();
             return output;
         } finally {
+
+            // 핵심 기능 수행 후
+
             // 측정 종료 시간
             long endTime = System.currentTimeMillis();
             // 수행시간 = 종료 시간 - 시작 시간
